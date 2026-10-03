@@ -79,19 +79,49 @@ works without it.
 - Nothing is logged except errors. Activation and confirmation codes are not
   stored.
 
-## Build and install
+## Related projects
 
-Needs the builder image from `../blackberry10-toolchain` (for `bb10-cc`, moc and
-the BB10 SDK) and the qnx/arm Go toolchain from `~/go-qnx` (built once with
-`cd ~/go-qnx/src && ./make.bash`; set `GOQNX` for another path).
+eSIM Manager is built with two other projects, both usable for other BB10
+apps:
+
+- [blackberry10-toolchain](https://github.com/XIAZY/blackberry10-toolchain): a
+  Docker image with a modern clang and GNU binutils toolchain for BB10, the
+  Cascades/Qt SDK, Qt's moc, and `bb10-cc`, a gcc-compatible driver that cgo
+  and other build tools can use.
+- [go-qnx](https://github.com/XIAZY/go-qnx): Go with a port to QNX
+  (`GOOS=qnx`, `GOARCH=386` and `arm`), including cgo on BlackBerry 10.
+
+## Building from source
+
+Only Docker is needed:
 
 ```sh
-tools/build.sh                 # -> build/io.github.xiazy.esimmanager.bar
-tools/install.sh root@<phone>  # phones rooted with bb10mt
+docker build --output build .    # -> build/io.github.xiazy.esimmanager.bar
 ```
+
+The Dockerfile builds go-qnx at a pinned commit and then the app on the
+builder image (`ghcr.io/xiazy/blackberry10-toolchain`). To use a builder image
+you built yourself, add `--build-arg TOOLCHAIN_IMAGE=bb10-builder:latest`.
+
+Install the BAR on a phone rooted with bb10mt (the phone's own installer, over
+SSH; this needs a clone of blackberry10-toolchain next to this repository, or
+`BB10_TOOLCHAIN` pointing at one):
+
+```sh
+tools/install.sh root@<phone>
+```
+
+### Development builds
+
+`tools/build.sh` builds with a local go-qnx checkout (default `~/go-qnx`, built
+once with `cd ~/go-qnx/src && ./make.bash`; set `GOQNX` for another path) and
+the builder image (`BB10_BUILDER_IMAGE`, default `bb10-builder:latest`), and
+keeps Go's build cache between runs. Both paths run `tools/build-inside.sh`.
 
 `go test ./internal/tlv ./internal/euicc ./internal/es9p` runs the tests on the
 host (the cgo packages only build for the phone). They use dummy identifiers.
+
+`tools/icons.py` draws the app and action icons (Cascades cannot load SVG).
 
 ## License
 
