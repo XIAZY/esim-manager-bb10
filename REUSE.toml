@@ -12,3 +12,11 @@ path = ["internal/euicc/**", "internal/es9p/**", "internal/tlv/**"]
 precedence = "override"
 SPDX-FileCopyrightText = ["2023-2025 ESTKME TECHNOLOGY LIMITED, Hong Kong", "2026 Zhongyang Xia"]
 SPDX-License-Identifier = "LGPL-2.1-only"
+
+# Public root certificates, published by their issuers for anyone to trust;
+# not covered by this project's license.
+[[annotations]]
+path = ["internal/es9p/roots/osmocom-ci-bundle.pem"]
+precedence = "override"
+SPDX-FileCopyrightText = "The certificate issuers named in internal/es9p/roots/README.md; bundle by the Osmocom eUICC manual"
+SPDX-License-Identifier = "LicenseRef-Public-Certificates"

@@ -84,11 +84,13 @@ works without it.
   process on such a phone, any app included, can become root this way. eSIM Manager
   only uses `__rrm` for the one `setfacl` above, but the exposure exists
   whether or not eSIM Manager is installed.
-- Like lpac, the HTTPS client does not verify the SM-DP+ certificate (SM-DP+
-  certificates chain to the GSMA CI, not a web root). Someone on the network
-  path could read the activation code, but cannot install a profile: the eUICC
-  checks the server's GSMA certificate chain and the profile package's
-  signature itself. Responses are capped at 4 MB.
+- Servers' TLS certificates are verified against the production GSMA
+  certificate issuers only (GSMA RSP2 Root CI1, OISTE, Entrust, IDEMIA, G+D),
+  from Osmocom's CI bundle (`internal/es9p/roots`), which SGP.22 requires
+  SM-DP+ servers to chain to. The phone's store and public web roots are not
+  trusted, so a web certificate, however valid, cannot stand in for an SM-DP+.
+  Redirects are not followed. Responses are capped at 4 MB. The eUICC also
+  authenticates the SM-DP+ itself and checks the profile package's signature.
 - Nothing is logged except errors. Activation and confirmation codes are not
   stored.
 

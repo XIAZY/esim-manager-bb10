@@ -11,6 +11,13 @@ Copyright (C) 2023-2025 ESTKME TECHNOLOGY LIMITED, Hong Kong.
 libeuicc is licensed under LGPL-2.1-only (or ESTKME's commercial license);
 this translation is distributed under LGPL-2.1-only, see `LICENSE`.
 
+## Root certificates
+
+`internal/es9p/roots` holds public root certificates of the GSMA SGP.22
+certificate issuers (GSMA, OISTE, Entrust, Oberthur/IDEMIA, Giesecke+Devrient),
+as bundled by Osmocom's eUICC manual
+(https://euicc-manual.osmocom.org/docs/pki/ci/).
+
 ## The Go runtime and standard library
 
 Binaries of eSIM Manager contain the Go runtime and standard library, built

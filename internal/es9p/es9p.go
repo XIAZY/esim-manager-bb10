@@ -5,16 +5,14 @@
 // Copyright (C) 2026 Zhongyang Xia
 // SPDX-License-Identifier: LGPL-2.1-only
 //
-// Like lpac, it does not verify the server's TLS certificate: SM-DP+
-// certificates chain to the GSMA CI, not a web root. The eUICC authenticates
-// the server itself (AuthenticateServer, PrepareDownload) and checks the
-// profile package's signature, so a man in the middle can read the exchange
-// but cannot install a profile.
+// Servers' TLS certificates are verified against the GSMA certificate issuers
+// only, never web roots, and redirects are not followed; see roots.go. The
+// eUICC also authenticates the server itself (AuthenticateServer,
+// PrepareDownload) and checks the profile package's signature.
 package es9p
 
 import (
 	"bytes"
-	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
@@ -22,19 +20,11 @@ import (
 	"io"
 	"net/http"
 	"strings"
-	"time"
 )
 
 // maxResponse caps what a server (or anyone on the path) can make us buffer.
 // Bound profile packages are tens of kilobytes.
 const maxResponse = 4 << 20
-
-var client = &http.Client{
-	Timeout: 60 * time.Second,
-	Transport: &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	},
-}
 
 // Error is a failure reported by the server, or of the request itself.
 type Error struct {
@@ -68,7 +58,7 @@ func call(server, path string, req map[string]string) (map[string]json.RawMessag
 	hr.Header.Set("X-Admin-Protocol", "gsma/rsp/v2.2.2")
 	hr.Header.Set("Content-Type", "application/json")
 
-	resp, err := client.Do(hr)
+	resp, err := client().Do(hr)
 	if err != nil {
 		return nil, &Error{Message: "cannot reach the server: " + err.Error()}
 	}
