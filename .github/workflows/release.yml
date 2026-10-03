@@ -1,0 +1,55 @@
+# Pushing a tag vX.Y.Z builds the BAR from source and publishes it as a
+# GitHub release. Running the workflow by hand builds it as an artifact only.
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bar:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from the tag
+        if: github.ref_type == 'tag'
+        run: |
+          version=${GITHUB_REF_NAME#v}
+          echo "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$' ||
+            { echo "tag must be vX.Y.Z, got $GITHUB_REF_NAME" >&2; exit 1; }
+          # BB10 compares versionNumber, then buildId, to decide on upgrades.
+          sed -i -e "s|<versionNumber>.*</versionNumber>|<versionNumber>$version</versionNumber>|" \
+                 -e "s|<buildId>.*</buildId>|<buildId>$GITHUB_RUN_NUMBER</buildId>|" bar-descriptor.xml
+          grep -E "versionNumber|buildId" bar-descriptor.xml
+
+      - name: Build
+        run: docker build --pull --output build .
+
+      - name: Checksum
+        run: cd build && sha256sum *.bar > SHA256SUMS && cat SHA256SUMS
+
+      - name: Upload (manual runs)
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@v4
+        with:
+          name: esimmanager-bar
+          path: build/*
+
+      - name: Publish the release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > notes.md <<'NOTES'
+          `io.github.xiazy.esimmanager.bar` is an unsigned development-mode package for BlackBerry 10.
+          Install it on a phone in Development Mode, or on a phone rooted with bb10mt with
+          `tools/install.sh` from this repository. eSIM Manager needs a bb10mt-rooted phone to reach
+          the SIM; see the README.
+          NOTES
+          gh release create "$GITHUB_REF_NAME" build/*.bar build/SHA256SUMS \
+            --title "eSIM Manager $GITHUB_REF_NAME" --notes-file notes.md --verify-tag

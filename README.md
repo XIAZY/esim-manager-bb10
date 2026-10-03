@@ -18,6 +18,19 @@ It can:
   downloads and deletes, and on refresh
 - show the eUICC's EID, versions, free memory and certificates
 
+## Download
+
+Prebuilt packages are on the
+[releases page](https://github.com/XIAZY/esim-manager-bb10/releases), with a
+`SHA256SUMS` file. They are unsigned development-mode BARs: install them on a
+phone in Development Mode, or on a phone rooted with bb10mt with
+`tools/install.sh` (see [Building from source](#building-from-source)). The app
+needs a bb10mt-rooted phone to reach the SIM; see
+[Device setup](#device-setup-root).
+
+Pushing a tag `vX.Y.Z` builds and publishes a release
+(`.github/workflows/release.yml`); the tag sets the package's version.
+
 ## Layout
 
 All logic is Go. C is limited to two thin cgo layers:
