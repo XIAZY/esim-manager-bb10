@@ -2,7 +2,7 @@ version = 1
 
 [[annotations]]
 path = ["**"]
-SPDX-FileCopyrightText = "2026 Zhongyang Xia"
+SPDX-FileCopyrightText = "2026 AlphaToad"
 SPDX-License-Identifier = "LGPL-2.1-only"
 
 # A Go translation of lpac's libeuicc (euicc/), which is
@@ -10,7 +10,7 @@ SPDX-License-Identifier = "LGPL-2.1-only"
 [[annotations]]
 path = ["internal/euicc/**", "internal/es9p/**", "internal/tlv/**"]
 precedence = "override"
-SPDX-FileCopyrightText = ["2023-2025 ESTKME TECHNOLOGY LIMITED, Hong Kong", "2026 Zhongyang Xia"]
+SPDX-FileCopyrightText = ["2023-2025 ESTKME TECHNOLOGY LIMITED, Hong Kong", "2026 AlphaToad"]
 SPDX-License-Identifier = "LGPL-2.1-only"
 
 # Public root certificates, published by their issuers for anyone to trust;

@@ -1,6 +1,6 @@
 // ES9+ TLS trust: the GSMA certificate issuers only.
 //
-// Copyright (C) 2026 Zhongyang Xia
+// Copyright (C) 2026 AlphaToad
 // SPDX-License-Identifier: LGPL-2.1-only
 package es9p
 

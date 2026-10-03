@@ -6,7 +6,7 @@ set -eu
 
 repo=$(cd "$(dirname "$0")/.." && pwd)
 goqnx=${GOQNX:-$HOME/go-qnx}
-image=${BB10_BUILDER_IMAGE:-bb10-builder:latest}
+image=${BB10_BUILDER_IMAGE:-ghcr.io/xiazy/blackberry10-toolchain:latest}
 [ -x "$goqnx/bin/go" ] || { echo "error: no Go toolchain in $goqnx (run src/make.bash there)" >&2; exit 1; }
 mkdir -p "$repo/build"
 

@@ -48,7 +48,7 @@ jobs:
           cat > notes.md <<'NOTES'
           `io.github.xiazy.esimmanager.bar` is an unsigned development-mode package for BlackBerry 10.
           Install it on a phone in Development Mode, or on a phone rooted with bb10mt with
-          `tools/install.sh` from this repository. eSIM Manager needs a bb10mt-rooted phone to reach
+          `tools/install.sh <ssh-host> io.github.xiazy.esimmanager.bar` from this repository. eSIM Manager needs a bb10mt-rooted phone to reach
           the SIM; see the README.
           NOTES
           gh release create "$GITHUB_REF_NAME" build/*.bar build/SHA256SUMS \

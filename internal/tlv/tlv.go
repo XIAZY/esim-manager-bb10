@@ -3,7 +3,7 @@
 // derutil.
 //
 // Copyright (C) 2023-2025 ESTKME TECHNOLOGY LIMITED, Hong Kong
-// Copyright (C) 2026 Zhongyang Xia
+// Copyright (C) 2026 AlphaToad
 // SPDX-License-Identifier: LGPL-2.1-only
 package tlv
 

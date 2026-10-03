@@ -2,7 +2,7 @@
 // HTTPS, a Go translation of lpac's libeuicc es9p.
 //
 // Copyright (C) 2023-2025 ESTKME TECHNOLOGY LIMITED, Hong Kong
-// Copyright (C) 2026 Zhongyang Xia
+// Copyright (C) 2026 AlphaToad
 // SPDX-License-Identifier: LGPL-2.1-only
 //
 // Servers' TLS certificates are verified against the GSMA certificate issuers

@@ -24,8 +24,9 @@ Prebuilt packages are on the
 [releases page](https://github.com/XIAZY/esim-manager-bb10/releases), with a
 `SHA256SUMS` file. They are unsigned development-mode BARs: install them on a
 phone in Development Mode, or on a phone rooted with bb10mt with
-`tools/install.sh` (see [Building from source](#building-from-source)). The app
-needs a bb10mt-rooted phone to reach the SIM; see
+`tools/install.sh root@<phone> io.github.xiazy.esimmanager.bar`, which needs
+only ssh and scp and works on its own, without a clone of this repository. The
+app needs a bb10mt-rooted phone to reach the SIM; see
 [Device setup](#device-setup-root).
 
 Pushing a tag `vX.Y.Z` builds and publishes a release
@@ -118,9 +119,8 @@ The Dockerfile builds go-qnx at a pinned commit and then the app on the
 builder image (`ghcr.io/xiazy/blackberry10-toolchain`). To use a builder image
 you built yourself, add `--build-arg TOOLCHAIN_IMAGE=bb10-builder:latest`.
 
-Install the BAR on a phone rooted with bb10mt (the phone's own installer, over
-SSH; this needs a clone of blackberry10-toolchain next to this repository, or
-`BB10_TOOLCHAIN` pointing at one):
+Install the BAR on a phone rooted with bb10mt, with the phone's own installer
+over SSH:
 
 ```sh
 tools/install.sh root@<phone>
@@ -130,8 +130,9 @@ tools/install.sh root@<phone>
 
 `tools/build.sh` builds with a local go-qnx checkout (default `~/go-qnx`, built
 once with `cd ~/go-qnx/src && ./make.bash`; set `GOQNX` for another path) and
-the builder image (`BB10_BUILDER_IMAGE`, default `bb10-builder:latest`), and
-keeps Go's build cache between runs. Both paths run `tools/build-inside.sh`.
+the builder image (`BB10_BUILDER_IMAGE`, default
+`ghcr.io/xiazy/blackberry10-toolchain:latest`), and keeps Go's build cache
+between runs. Both paths run `tools/build-inside.sh`.
 
 `go test ./internal/tlv ./internal/euicc ./internal/es9p` runs the tests on the
 host (the cgo packages only build for the phone). They use dummy identifiers.
