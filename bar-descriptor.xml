@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<qnx xmlns="http://www.qnx.com/schemas/application/1.0">
+    <id>io.github.xiazy.esimmanager</id>
+    <name>eSIM Manager</name>
+    <versionNumber>0.1.0</versionNumber>
+    <buildId>1</buildId>
+    <description>eSIM profile manager for BlackBerry 10.</description>
+    <author>Zhongyang Xia</author>
+
+    <icon>
+        <image>assets/icon.png</image>
+    </icon>
+
+    <initialWindow>
+        <autoOrients>true</autoOrients>
+        <systemChrome>none</systemChrome>
+    </initialWindow>
+
+    <configuration name="Device-Debug">
+        <platformArchitecture>armle-v7</platformArchitecture>
+        <asset path="build/esimmanager" entry="true" type="Qnx/Elf">esimmanager</asset>
+    </configuration>
+
+    <asset path="assets">assets</asset>
+    <asset path="LICENSE">LICENSE</asset>
+    <asset path="THIRD_PARTY_NOTICES.md">THIRD_PARTY_NOTICES.md</asset>
+
+    <permission system="true">run_native</permission>
+    <!-- scanning activation code QR codes -->
+    <permission>use_camera</permission>
+    <env var="LD_LIBRARY_PATH" value="/usr/lib/qt4/lib"/>
+</qnx>
