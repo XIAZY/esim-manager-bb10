@@ -1,10 +1,14 @@
-# Pushing a tag vX.Y.Z builds the BAR from source and publishes it as a
-# GitHub release. Running the workflow by hand builds it as an artifact only.
-name: release
+# Builds the BAR from source on every push to main, every pull request and a
+# run by hand, and keeps it with its checksum as the run's artifact. Pushing a
+# tag vX.Y.Z also builds it with that version and publishes it as a GitHub
+# release.
+name: build
 
 on:
   push:
+    branches: [main]
     tags: ["v*"]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -33,7 +37,7 @@ jobs:
       - name: Checksum
         run: cd build && sha256sum *.bar > SHA256SUMS && cat SHA256SUMS
 
-      - name: Upload (manual runs)
+      - name: Upload (all but tag runs)
         if: github.ref_type != 'tag'
         uses: actions/upload-artifact@v4
         with:
