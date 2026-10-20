@@ -18,6 +18,18 @@ It can:
   downloads and deletes, and on refresh
 - show the eUICC's EID, versions, free memory and certificates
 
+## Screenshots
+
+<p>
+<img src="docs/images/profiles.png" width="32%" alt="The profile list: the card's EID, eight profiles with their names and operators, the enabled one marked, and Add profile and Refresh below">
+<img src="docs/images/menu.png" width="32%" alt="The menu over the profile list: Add profile, Refresh, Notifications with six pending, and eUICC info">
+<img src="docs/images/profile.png" width="32%" alt="A profile's details: its state, provider, profile name, ICCID, class and ISD-P AID, with Enable and Rename below">
+</p>
+
+The profile list on a BlackBerry Passport, with the card's EID at the top; the
+menu, with the pending notifications; and one profile's details. The EID and
+the ICCIDs are masked.
+
 ## Download
 
 Prebuilt packages are on the
