@@ -5,23 +5,18 @@
 #   docker build --output build .     # -> build/io.github.xiazy.esimmanager.bar
 #
 # The BB10 builder image comes from https://github.com/XIAZY/blackberry10-toolchain
-# (set TOOLCHAIN_IMAGE to use a locally built one); the qnx/arm Go toolchain is
-# built from https://github.com/XIAZY/go-qnx at a pinned commit.
+# (set TOOLCHAIN_IMAGE to use a locally built one); Go with the QNX port comes
+# from the Go team's image, https://github.com/XIAZY/go-qnx (Go in
+# /usr/local/go, as in the official golang image). Both are pinned by digest,
+# each the multi-arch index, so the same build runs on amd64 and arm64.
 
-ARG TOOLCHAIN_IMAGE=ghcr.io/xiazy/blackberry10-toolchain:latest
-ARG GO_QNX_COMMIT=83c87d631cd303e993352727ede4a135475597e7
+ARG TOOLCHAIN_IMAGE=ghcr.io/xiazy/blackberry10-toolchain@sha256:60ce49510a37ed92368cca010bbaabf97b12d209b9fab179e8491b266bb2578f
 
-# go-qnx: Go with the QNX port, bootstrapped with upstream Go.
-FROM golang:1.27-bookworm AS go-qnx
-ARG GO_QNX_COMMIT
-RUN git init -q /go-qnx && cd /go-qnx && \
-    git fetch -q --depth 1 https://github.com/XIAZY/go-qnx.git "$GO_QNX_COMMIT" && \
-    git checkout -q FETCH_HEAD && \
-    cd src && GOROOT_BOOTSTRAP=/usr/local/go ./make.bash && \
-    rm -rf /go-qnx/.git /go-qnx/pkg/obj /go-qnx/test
+# go-qnx 1.27.2: upstream Go 1.27.2 with the QNX port.
+FROM ghcr.io/xiazy/go-qnx:1.27.2@sha256:1915ce0568acda8de04c82be016a47fa267858aef4b7c7b77402363770c04669 AS go-qnx
 
 FROM ${TOOLCHAIN_IMAGE} AS build
-COPY --from=go-qnx /go-qnx /opt/go-qnx
+COPY --from=go-qnx /usr/local/go /opt/go-qnx
 ENV PATH=/opt/go-qnx/bin:$PATH \
     HOME=/tmp/home \
     GOCACHE=/tmp/go-cache

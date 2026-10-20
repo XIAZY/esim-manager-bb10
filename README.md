@@ -29,8 +29,10 @@ only ssh and scp and works on its own, without a clone of this repository. The
 app needs a bb10mt-rooted phone to reach the SIM; see
 [Device setup](#device-setup-root).
 
-Pushing a tag `vX.Y.Z` builds and publishes a release
-(`.github/workflows/release.yml`); the tag sets the package's version.
+Every push to `main` and every pull request builds the package, kept with its
+checksum as the run's artifact (`.github/workflows/build.yml`); pushing a tag
+`vX.Y.Z` also publishes it as a release, and the tag sets the package's
+version.
 
 ## Layout
 
@@ -115,9 +117,11 @@ Only Docker is needed:
 docker build --output build .    # -> build/io.github.xiazy.esimmanager.bar
 ```
 
-The Dockerfile builds go-qnx at a pinned commit and then the app on the
-builder image (`ghcr.io/xiazy/blackberry10-toolchain`). To use a builder image
-you built yourself, add `--build-arg TOOLCHAIN_IMAGE=bb10-builder:latest`.
+The Dockerfile takes Go with the QNX port from the Go team's image
+(`ghcr.io/xiazy/go-qnx:1.27.2`) and builds the app on the builder image
+(`ghcr.io/xiazy/blackberry10-toolchain`), both pinned by digest. To use a
+builder image you built yourself, add
+`--build-arg TOOLCHAIN_IMAGE=bb10-builder:latest`.
 
 Install the BAR on a phone rooted with bb10mt, with the phone's own installer
 over SSH:
@@ -128,10 +132,10 @@ tools/install.sh root@<phone>
 
 ### Development builds
 
-`tools/build.sh` builds with a local go-qnx checkout (default `~/go-qnx`, built
-once with `cd ~/go-qnx/src && ./make.bash`; set `GOQNX` for another path) and
-the builder image (`BB10_BUILDER_IMAGE`, default
-`ghcr.io/xiazy/blackberry10-toolchain:latest`), and keeps Go's build cache
+`tools/build.sh` builds with the same two images as the Dockerfile: it copies
+Go out of the Go team's image once, to `build/go-qnx/`, and reuses it (set
+`GOQNX` to use a go-qnx checkout of your own, built with `src/make.bash`, and
+`BB10_BUILDER_IMAGE` for another builder image), and keeps Go's build cache
 between runs. Both paths run `tools/build-inside.sh`.
 
 `go test ./internal/tlv ./internal/euicc ./internal/es9p` runs the tests on the
